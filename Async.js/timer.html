@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      text-align: center;
+      margin: 50px;
+    }
+
+    #timer {
+      font-size: 2em;
+      margin-top: 20px;
+    }
+
+    #inputBoxes {
+      margin-top: 20px;
+    }
+
+    #buttons {
+      margin-top: 20px;
+    }
+  </style>
+  <title>Timer</title>
+</head>
+<body>
+
+<div id="inputBoxes">
+  <label for="hours">Hours:</label>
+  <input type="number" id="hours" min="0" value="0">
+
+  <label for="minutes">Minutes:</label>
+  <input type="number" id="minutes" min="0" value="0">
+
+  <label for="seconds">Seconds:</label>
+  <input type="number" id="seconds" min="0" value="0">
+</div>
+
+<div id="timer">00:00:00</div>
+
+<div id="buttons">
+  <button onclick="start()">Start</button>
+  <button onclick="pause()">Pause</button>
+  <button onclick="reset()">Reset</button>
+</div>
+
+<script>
+  let timer;
+  let totalSeconds;
+  let currentSeconds;
+  let isRunning = false;
+
+  function start() {
+    if (!isRunning) {
+      isRunning = true;
+      totalSeconds = parseInt(document.getElementById('hours').value) * 3600 +
+                    parseInt(document.getElementById('minutes').value) * 60 +
+                    parseInt(document.getElementById('seconds').value);
+      currentSeconds = totalSeconds;
+      timer = setInterval(updateTimer, 1000);
+    }
+  }
+
+  function pause() {
+    clearInterval(timer);
+    isRunning = false;
+  }
+
+  function reset() {
+    clearInterval(timer);
+    isRunning = false;
+    document.getElementById('hours').value = 0;
+    document.getElementById('minutes').value = 0;
+    document.getElementById('seconds').value = 0;
+    updateDisplay();
+  }
+
+  function updateTimer() {
+    if (currentSeconds > 0) {
+      currentSeconds--;
+      updateDisplay();
+    } else {
+      clearInterval(timer);
+      isRunning = false;
+      alert("Timer completed!");
+    }
+  }
+
+  function updateDisplay() {
+    const hours = Math.floor(currentSeconds / 3600);
+    const minutes = Math.floor((currentSeconds % 3600) / 60);
+    const seconds = currentSeconds % 60;
+
+    const formattedTime = `${pad(hours)}:${pad(minutes)}:${pad(seconds)}`;
+    document.getElementById('timer').innerText = formattedTime;
+  }
+
+  function pad(value) {
+    return value < 10 ? `0${value}` : value;
+  }
+</script>
+
+</body>
+</html>

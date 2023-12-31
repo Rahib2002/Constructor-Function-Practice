@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Virtual Food Ordering</title>
+    <style>
+        body {
+            text-align: center;
+        }
+
+        #status {
+            margin-top: 20px;
+            font-size: 18px;
+        }
+
+        #foodItems {
+            margin-top: 20px;
+        }
+
+        label {
+            margin-right: 10px;
+        }
+
+        button {
+            margin-top: 20px;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        #foodImage {
+            display: none;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Food Ordering System</h1>
+
+    <div id="status"></div>
+
+    <div id="foodItems">
+        <label for="pizza">Pizza</label>
+        <input type="checkbox" id="pizza" value="Pizza">
+
+        <label for="burger">Burger</label>
+        <input type="checkbox" id="burger" value="Burger">
+
+        <label for="fries">Fries</label>
+        <input type="checkbox" id="fries" value="Fries">
+    </div>
+    
+    <button onclick="orderFood()">Order Food</button>
+
+    <div id="foodImage">
+        <!-- Food image will be displayed here -->
+    </div>
+
+    <script>
+        let foodItems = document.querySelectorAll("#foodItems input");
+        let status = document.querySelector("#status");
+        let foodImage = document.querySelector("#foodImage");
+
+        function orderFood() {
+            let items = Array.from(foodItems);
+            let h1 = document.createElement("h1");
+            h1.innerText = "Food is being ordered";
+            status.innerHTML = "";
+            status.append(h1);
+
+            promiseCreate(items).then((res) => {
+                h1.innerText = "Food is ordered Successfully.";
+                showFoodImage(res);
+            });
+        }
+
+        function promiseCreate(items) {
+            return new Promise((resolve, reject) => {
+                setTimeout(() => {
+                    let selectedItems = items.filter(item => item.checked).map(item => item.value);
+                    resolve(selectedItems);
+                }, 2000);
+            });
+        }
+
+        function showFoodImage(items) {
+            foodImage.innerHTML = "";
+            foodImage.style.display = "block";
+
+            
+            items.forEach(item => {
+                let img = document.createElement("img");
+                img.src = getItemImage(item);
+                foodImage.appendChild(img);
+            });
+        }
+
+        function getItemImage(item) {
+            
+            switch (item) {
+                case 'Pizza':
+                    return 'pizza.jpg';
+                case 'Burger':
+                    return 'burger.jpg';
+                case 'Fries':
+                    return 'fries.jpg';
+                default:
+                    return '';
+            }
+        }
+    </script>
+</body>
+</html>

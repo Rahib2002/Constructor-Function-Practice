@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>User Information Form</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f0f0f0;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    #form-container {
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+
+    table, th, td {
+      border: 1px solid #ddd;
+    }
+
+    th, td {
+      padding: 10px;
+      text-align: left;
+    }
+
+    th {
+      background-color: #f2f2f2;
+    }
+
+    button {
+      margin-top: 10px;
+      padding: 10px;
+      cursor: pointer;
+      background-color: #4caf50;
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+    }
+
+    button:hover {
+      background-color: #45a049;
+    }
+  </style>
+</head>
+<body>
+  <div id="form-container">
+    <form id="userForm">
+      <label for="name">Name:</label>
+      <input type="text" id="name" required>
+
+      <label for="age">Age:</label>
+      <input type="number" id="age" required>
+
+      <button type="button" onclick="submitForm()">Submit</button>
+    </form>
+
+    <button type="button" onclick="displayData()">Display Data</button>
+
+    <div id="display-area"></div>
+  </div>
+
+  <script>
+    function submitForm() {
+      var name = document.getElementById('name').value;
+      var age = document.getElementById('age').value;
+
+      if (name && age) {
+        var userData = {
+          name: name,
+          age: age
+        };
+
+        localStorage.setItem('userData', JSON.stringify(userData));
+        alert('Data stored successfully!');
+      } else {
+        alert('Please fill out both name and age fields.');
+      }
+    }
+
+    function displayData() {
+      var userDataString = localStorage.getItem('userData');
+
+      if (userDataString) {
+        var userData = JSON.parse(userDataString);
+
+        var displayArea = document.getElementById('display-area');
+        displayArea.innerHTML = '';
+
+        var table = document.createElement('table');
+        var tr = document.createElement('tr');
+
+        var th1 = document.createElement('th');
+        th1.textContent = 'Name';
+
+        var th2 = document.createElement('th');
+        th2.textContent = 'Age';
+
+        tr.appendChild(th1);
+        tr.appendChild(th2);
+        table.appendChild(tr);
+
+        var trData = document.createElement('tr');
+
+        var td1 = document.createElement('td');
+        td1.textContent = userData.name;
+
+        var td2 = document.createElement('td');
+        td2.textContent = userData.age;
+
+        trData.appendChild(td1);
+        trData.appendChild(td2);
+        table.appendChild(trData);
+
+        displayArea.appendChild(table);
+      } else {
+        alert('No data found. Please submit the form first.');
+      }
+    }
+  </script>
+</body>
+</html>

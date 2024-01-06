@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="styles.css">
+  <title>Fetch Users</title>
+  <style>
+    body {
+    font-family: Arial, sans-serif;
+    text-align: center;
+    margin: 20px;
+    }
+
+    button {
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    }
+
+    #userDataContainer {
+    margin-top: 20px;
+    }
+
+    .userCard {
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 10px;
+    margin: 10px;
+    display: inline-block;
+    text-align: left;
+    }
+
+    .avatar {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    margin-right: 10px;
+    }
+
+  </style>
+</head>
+<body>
+  <button id="fetchButton">Fetch Users</button>
+  <div id="userDataContainer"></div>
+
+  <script src="index.js"></script>
+</body>
+
+<script>
+    document.getElementById('fetchButton').addEventListener('click', fetchUsers);
+
+function fetchUsers() {
+  const userDataContainer = document.getElementById('userDataContainer');
+  userDataContainer.innerHTML = ''; // Clear previous data
+
+  fetch('https://reqres.in/api/users')
+    .then(response => response.json())
+    .then(data => {
+      const users = data.data;
+      users.forEach(user => {
+        const userCard = document.createElement('div');
+        userCard.className = 'userCard';
+
+        const avatar = document.createElement('img');
+        avatar.src = user.avatar;
+        avatar.alt = 'User Avatar';
+        avatar.className = 'avatar';
+
+        const userInfo = document.createElement('div');
+        const name = document.createElement('p');
+        const email = document.createElement('p');
+
+        name.innerText = `Name: ${user.first_name} ${user.last_name}`;
+        email.innerText = `Email: ${user.email}`;
+
+        userInfo.appendChild(name);
+        userInfo.appendChild(email);
+
+        userCard.appendChild(avatar);
+        userCard.appendChild(userInfo);
+
+        userDataContainer.appendChild(userCard);
+      });
+    })
+    .catch(error => {
+      console.error('Error fetching user data:', error);
+    });
+}
+
+</script>
+</html>
